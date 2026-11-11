@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Gloria Vañó · Reservar sesión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Demo genérica de los nichos (nichos.py): servicios, cita o presupuesto y asistente. Todo es de ejemplo. */
+:root{
+  --acento:#2563eb; --ink:#15171a; --paper:#f6f5f2; --card:#fff; --line:#e2e0db; --muted:#62666c;
+  --display:"Bricolage Grotesque",system-ui,sans-serif; --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.cabecera{background:var(--ink);color:#fff;position:relative;overflow:hidden;padding:34px max(18px,env(safe-area-inset-left)) 30px}
+.cabecera::after{content:"";position:absolute;right:-80px;top:-80px;width:260px;height:260px;border-radius:50%;background:var(--acento);opacity:.55}
+.cabecera .dentro{position:relative;z-index:1;max-width:880px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 24px}
+.tipo{font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#d7d7d7}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(32px,7.5vw,56px);line-height:1;margin:4px 0 0;text-wrap:balance}
+.cabecera p{margin:8px 0 0;color:#cfcfcf}
+.cabecera .cta{margin-left:auto}
+.boton{font:inherit;font-weight:700;border:0;border-radius:999px;padding:13px 22px;cursor:pointer;background:var(--acento);color:#fff;text-decoration:none;display:inline-block}
+.boton.claro{background:#fff;color:var(--ink)}
+.boton:disabled{opacity:.4;cursor:default}
+.boton:focus-visible,.op:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--acento);outline-offset:2px}
+main{max-width:880px;margin:0 auto;padding:22px max(18px,env(safe-area-inset-left)) 70px;display:grid;gap:20px}
+.bloque{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+h2{font-family:var(--display);font-weight:800;font-size:22px;margin:0 0 12px}
+.paso{color:var(--acento);font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:2px}
+.opciones{display:grid;gap:8px}
+.servicios{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.op{font:inherit;color:inherit;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.op small{color:var(--muted);display:block;font-size:12.5px}
+.op b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.op.on{border-color:var(--acento);box-shadow:inset 0 0 0 1.5px var(--acento)}
+.dias{grid-template-columns:repeat(7,minmax(0,1fr))}
+.dia{flex-direction:column;align-items:center;gap:0;padding:9px 4px;text-align:center}
+.dia small{font-size:11px;text-transform:uppercase}
+.dia b{font-size:19px}
+.horas{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))}
+.hora{justify-content:center;font-variant-numeric:tabular-nums;font-weight:600}
+.hora:disabled{opacity:.35;text-decoration:line-through;cursor:default}
+.campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px}
+label{font-size:12.5px;font-weight:600;color:var(--muted)}
+input,textarea{width:100%;font:inherit;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;margin-top:4px;background:#fff;color:var(--ink)}
+textarea{min-height:90px;resize:vertical}
+.check{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--ink);margin:4px 0 12px}
+.check input{width:auto;margin:0}
+.resumen{font-size:14px;color:var(--muted);margin:0 0 12px}
+.ok{text-align:center;padding:30px 18px}
+.ok .sello{font-family:var(--display);font-weight:800;font-size:28px;color:var(--acento)}
+.ventajas{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.ventajas div{border-left:4px solid var(--acento);padding:4px 0 4px 12px}
+.ventajas b{display:block}
+.ventajas span{color:var(--muted);font-size:13.5px}
+.datos{display:flex;flex-wrap:wrap;gap:6px 22px;color:var(--muted);font-size:14px}
+.aviso{position:sticky;bottom:0;background:var(--ink);color:#e5e5e5;text-align:center;font-size:12px;padding:8px 14px calc(8px + env(safe-area-inset-bottom))}
+[hidden]{display:none!important}
+@media (max-width:520px){.dias{grid-template-columns:repeat(4,minmax(0,1fr))}.cabecera .cta{margin-left:0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="cabecera">
+  <div class="dentro">
+    <div>
+      <div class="tipo">fisioterapia</div>
+      <h1>Gloria Vañó</h1>
+      <p>Calle de Juan Álvarez Mendizábal 36, 28008, Madrid</p>
+    </div>
+    <a class="boton cta" href="#reserva">Reservar sesión</a>
+  </div>
+</header>
+
+<main>
+  <section class="bloque" id="reserva" aria-labelledby="t-reserva">
+    <div id="flujo">
+      <div class="paso" id="paso1">Paso 1</div>
+      <h2 id="t-reserva">¿Qué sesión quieres?</h2>
+      <div class="opciones servicios" id="servicios"></div>
+
+      
+      <div id="bloqueDia" hidden>
+        <div class="paso" style="margin-top:18px">Paso 2</div>
+        <h2>Día y hora</h2>
+        <div class="opciones dias" id="dias"></div>
+        <div class="opciones horas" id="horas" style="margin-top:10px"></div>
+      </div>
+      
+
+      <div id="bloqueDatos" hidden>
+        <div class="paso" style="margin-top:18px" id="pasoDatos">Último paso</div>
+        <h2>Tus datos</h2>
+        <p class="resumen" id="resumen"></p>
+        <div class="campos">
+          <div><label for="nombre">Nombre</label><input id="nombre" autocomplete="name" placeholder="Tu nombre"></div>
+          <div><label for="tel">Móvil</label><input id="tel" inputmode="tel" autocomplete="tel" placeholder="600 000 000"></div>
+          <div><label for="extra">Qué te pasa (opcional)</label><input id="extra" placeholder="Dolor lumbar"></div>
+        </div>
+        
+        <button class="boton" id="confirmar" type="button" disabled>Reservar sesión</button>
+      </div>
+    </div>
+    <div class="ok" id="hecho" hidden>
+      <div class="sello">Sesión reservada</div>
+      <p id="textoOk"></p>
+      <p style="color:var(--muted);font-size:13.5px">Te llegaría la confirmación por WhatsApp y un recordatorio el día antes.</p>
+      <button class="boton claro" style="border:1.5px solid var(--line)" type="button" id="otra">Hacer otra</button>
+    </div>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-por-que">
+    <h2 id="t-por-que">Lo que gana Gloria Vañó</h2>
+    <div class="ventajas">
+      <div><b>Agenda que se llena sola</b><span>Reservan 24/7 sin que cojas el teléfono.</span></div><div><b>Bonos controlados</b><span>Cada sesión se descuenta sola del bono.</span></div><div><b>Menos huecos vacíos</b><span>Recordatorios automáticos por WhatsApp.</span></div><div><b>Asistente 24/7</b><span>Contesta precios, horarios y dudas por ti.</span></div>
+    </div>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-donde">
+    <h2 id="t-donde">Dónde estamos</h2>
+    <div class="datos">
+      <span>Calle de Juan Álvarez Mendizábal 36, 28008, Madrid</span>
+      <span>+34696830234</span>
+      
+    </div>
+  </section>
+</main>
+<div class="aviso">Demo preparada por David para Gloria Vañó. Servicios, precios y horas son de ejemplo.</div>
+
+<script>
+"use strict";
+const D = {"horas": {"fin": 21, "ini": 9, "pausa": [14, 16], "sabado": true}, "modo": "cita", "servicios": [["Primera valoraci\u00f3n", "Te exploramos y planificamos el tratamiento", "30"], ["Sesi\u00f3n de fisioterapia", "50 minutos", "40"], ["Bono 5 sesiones", "\u00dasalo cuando quieras", "180"], ["Punci\u00f3n seca", "Incluye sesi\u00f3n", "45"], ["Fisio deportiva", "Lesiones y descarga", "45"]]};
+const estado = {s: null, d: null, h: null};
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const NOMBRES_DIA = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
+const precio = p => /^(desde )?\d+([.,]\d+)?$/.test(p) ? p + " €" : p;   // "45" -> "45 €"; "a presupuesto" tal cual
+
+function pintarServicios() {
+  $("servicios").innerHTML = D.servicios.map(([n, d, p], i) =>
+    `<button class="op${estado.s === i ? " on" : ""}" type="button" data-s="${i}" aria-pressed="${estado.s === i}"><span>${esc(n)}<small>${esc(d)}</small></span>${p ? `<b>${esc(precio(p))}</b>` : ""}</button>`).join("");
+}
+function proximosDias() {
+  const out = [], hoy = new Date();
+  for (let i = 0; out.length < 7 && i < 14; i++) {
+    const d = new Date(hoy); d.setDate(hoy.getDate() + i);
+    if (d.getDay() === 0 || (d.getDay() === 6 && !D.horas.sabado)) continue;   // cerrado (ejemplo)
+    out.push(d);
+  }
+  return out;
+}
+function pintarDias() {
+  $("dias").innerHTML = proximosDias().map((d, i) =>
+    `<button class="op dia${estado.d === i ? " on" : ""}" type="button" data-d="${i}"><small>${i === 0 && d.toDateString() === new Date().toDateString() ? "hoy" : NOMBRES_DIA[d.getDay()]}</small><b>${d.getDate()}</b></button>`).join("");
+}
+function pintarHoras() {
+  if (estado.d === null) { $("horas").innerHTML = ""; return; }
+  const horas = [], [p0, p1] = D.horas.pausa;
+  for (let h = D.horas.ini; h < D.horas.fin; h++) if (h < p0 || h >= p1) for (const m of [0, 30]) horas.push(`${String(h % 24).padStart(2, "0")}:${m ? "30" : "00"}`);
+  const ocupada = i => ((estado.d * 7 + i * 3) % 5 === 0);   // siempre las mismas: parece una agenda real
+  $("horas").innerHTML = horas.map((t, i) =>
+    `<button class="op hora${estado.h === t ? " on" : ""}" type="button" data-h="${t}" ${ocupada(i) ? `disabled aria-label="${t} ocupada"` : ""}>${t}</button>`).join("");
+}
+function listo() {
+  const datos = $("nombre").value.trim() && $("tel").value.replace(/\D/g, "").length >= 9;
+  return D.modo === "cita" ? datos : datos && $("extra").value.trim().length > 3;
+}
+function actualizar() {
+  pintarServicios();
+  if (D.modo === "cita") {
+    pintarDias(); pintarHoras();
+    $("bloqueDia").hidden = estado.s === null;
+    $("bloqueDatos").hidden = estado.h === null;
+    $("pasoDatos").textContent = "Paso 3";
+    if (estado.h !== null) {
+      const d = proximosDias()[estado.d];
+      $("resumen").textContent = `${D.servicios[estado.s][0]} · ${d.toLocaleDateString("es-ES", {weekday: "long", day: "numeric", month: "long"})} a las ${estado.h}`;
+    }
+  } else {
+    $("bloqueDatos").hidden = estado.s === null;
+    $("pasoDatos").textContent = "Paso 2";
+    if (estado.s !== null) $("resumen").textContent = D.servicios[estado.s][0];
+  }
+  $("confirmar").disabled = !listo();
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-s],[data-d],[data-h]"); if (!b || b.disabled) return;
+  if (b.dataset.s !== undefined) estado.s = +b.dataset.s;
+  if (b.dataset.d !== undefined) { estado.d = +b.dataset.d; estado.h = null; }
+  if (b.dataset.h !== undefined) estado.h = b.dataset.h;
+  actualizar();
+  const sig = b.dataset.s !== undefined ? (D.modo === "cita" ? $("bloqueDia") : $("bloqueDatos")) : b.dataset.h !== undefined ? $("bloqueDatos") : null;
+  if (sig) sig.scrollIntoView({behavior: "smooth", block: "nearest"});
+});
+["nombre", "tel", "extra"].forEach(id => $(id).addEventListener("input", actualizar));
+$("confirmar").onclick = () => {
+  const s = D.servicios[estado.s][0], nombre = $("nombre").value.trim();
+  if (D.modo === "cita") {
+    const d = proximosDias()[estado.d];
+    $("textoOk").textContent = `${nombre}: ${s.toLowerCase()} el ${d.toLocaleDateString("es-ES", {weekday: "long", day: "numeric"})} a las ${estado.h}.`;
+  } else {
+    const urg = $("urgente") && $("urgente").checked ? " Lo hemos marcado como urgente." : "";
+    $("textoOk").textContent = `${nombre}, hemos recibido tu solicitud de ${s.toLowerCase()}.${urg}`;
+  }
+  $("flujo").hidden = true; $("hecho").hidden = false;
+};
+$("otra").onclick = () => { estado.s = estado.d = estado.h = null; $("flujo").hidden = false; $("hecho").hidden = true; actualizar(); };
+actualizar();
+</script>
+
+<style>
+.asis-btn{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:calc(54px + env(safe-area-inset-bottom));z-index:50;border:0;border-radius:999px;
+  background:#1f9d55;color:#fff;font:600 14.5px/1 system-ui,-apple-system,"Segoe UI",sans-serif;padding:14px 18px;box-shadow:0 10px 26px rgba(0,0,0,.28);cursor:pointer;display:flex;gap:8px;align-items:center}
+.asis-btn:focus-visible,.asis-panel button:focus-visible,.asis-panel input:focus-visible{outline:3px solid #0b5d2e;outline-offset:2px}
+.asis-panel{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:calc(54px + env(safe-area-inset-bottom));z-index:51;width:min(360px,calc(100vw - 32px));height:min(520px,calc(100vh - 120px));
+  display:flex;flex-direction:column;background:#efeae2;border-radius:16px;overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,.35);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;color:#111}
+.asis-cab{background:#075e54;color:#fff;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.asis-cab b{display:block;font-size:14.5px}.asis-cab small{opacity:.85}
+.asis-cab button{margin-left:auto;background:none;border:0;color:#fff;font-size:22px;cursor:pointer;line-height:1}
+.asis-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.asis-m{max-width:85%;padding:8px 11px;border-radius:10px;white-space:pre-wrap;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.asis-m.bot{background:#fff;align-self:flex-start;border-top-left-radius:2px}
+.asis-m.yo{background:#d9fdd3;align-self:flex-end;border-top-right-radius:2px}
+.asis-rap{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 8px}
+.asis-rap button{border:1px solid #b9cbbf;background:#fff;color:#075e54;border-radius:999px;padding:6px 10px;font:600 12.5px system-ui,sans-serif;cursor:pointer}
+.asis-pie{display:flex;gap:6px;padding:8px;background:#f0f0f0}
+.asis-pie input{flex:1;border:0;border-radius:999px;padding:10px 14px;font:inherit;margin:0}
+.asis-pie button{border:0;border-radius:999px;background:#1f9d55;color:#fff;font-weight:700;padding:0 14px;cursor:pointer}
+.asis-nota{font-size:11px;color:#667;text-align:center;padding:0 10px 6px}
+.asis-panel[hidden],.asis-btn[hidden]{display:none!important}
+</style>
+<button class="asis-btn" id="asisAbrir" type="button" aria-controls="asisPanel" aria-expanded="false">💬 Pregunta al asistente</button>
+<div class="asis-panel" id="asisPanel" role="dialog" aria-label="Asistente de Gloria Vañó" hidden>
+  <div class="asis-cab"><div><b>Gloria Vañó</b><small>Asistente · responde al momento, 24/7</small></div><button type="button" id="asisCerrar" aria-label="Cerrar">×</button></div>
+  <div class="asis-msgs" id="asisMsgs" aria-live="polite"></div>
+  <div class="asis-rap" id="asisRap"></div>
+  <form class="asis-pie" id="asisForm"><input id="asisTxt" autocomplete="off" placeholder="Escribe tu pregunta…" aria-label="Tu pregunta"><button type="submit">Enviar</button></form>
+  <div class="asis-nota">Ejemplo: así contestaría también por WhatsApp a tus clientes.</div>
+</div>
+<script>
+(() => {
+  "use strict";
+  const N = {"direccion": "Calle de Juan \u00c1lvarez Mendiz\u00e1bal 36, 28008, Madrid", "horario": "", "nombre": "Gloria Va\u00f1\u00f3", "telefono": "+34696830234", "tipo": "fisio"};
+  // Nichos de nichos.py: sus respuestas llegan en `asis` ({nombre} = el negocio)
+  const EXTRA = (a => a ? {...a, hola: a.hola.replace("{nombre}", N.nombre), ancla: "#reserva", rapidas: a.rapidas || [], extra: a.extra || []} : {})({"extra": [["duele|dolor|lesi|contractura|espalda|rodilla|cuello", "Lo vemos en una primera valoraci\u00f3n (30 \u20ac, ejemplo): te exploramos y te decimos cu\u00e1ntas sesiones necesitas. \u00bfTe reservo hueco?"]], "hecho": "Genial. Elige la sesi\u00f3n, el d\u00eda y la hora aqu\u00ed mismo \ud83d\udc47", "hola": "\u00a1Hola! Soy el asistente de {nombre}. Te digo precios, horario o te reservo sesi\u00f3n.", "precios": "Primera valoraci\u00f3n: 30 \u20ac\nSesi\u00f3n (50 min): 40 \u20ac\nBono 5 sesiones: 180 \u20ac\nPunci\u00f3n seca: 45 \u20ac\n(precios de ejemplo)", "rapidas": ["\u00bfCu\u00e1nto cuesta una sesi\u00f3n?", "Me duele la espalda", "\u00bfQu\u00e9 horario ten\u00e9is?", "Reservar sesi\u00f3n"]});
+  const DIAS = {Mo: "lun", Tu: "mar", We: "mié", Th: "jue", Fr: "vie", Sa: "sáb", Su: "dom"};
+  const horario = N.horario ? N.horario.replace(/\b(Mo|Tu|We|Th|Fr|Sa|Su)\b/g, d => DIAS[d]).replace(/PH off|PH closed/g, "festivos cerrado").replace(/;\s*/g, "\n").replace(/ off\b/g, " cerrado")
+    : "de lunes a viernes de 10:00 a 20:00 y sábados por la mañana (horario de ejemplo)";
+  const donde = N.direccion ? `Estamos en ${N.direccion}.` : "Estamos en Madrid; te paso la ubicación exacta por WhatsApp.";
+  const R = {
+    barberia: {
+      hola: `¡Hola! Soy el asistente de ${N.nombre}. Te digo precios, horario o te reservo cita en un momento.`,
+      precios: "Corte 15 €\nCorte + barba 22 €\nArreglo de barba 10 €\nRapado 9 €\n(precios de ejemplo)",
+      accion: "Quiero reservar", hecho: "¡Claro! Elige servicio, día y hora aquí mismo y te llega un recordatorio por WhatsApp el día antes. Te llevo a las reservas 👇", ancla: "#reserva",
+      rapidas: ["¿Cuánto cuesta un corte?", "¿Qué horario tenéis?", "¿Dónde estáis?", "Quiero reservar"]},
+    taller: {
+      hola: `¡Hola! Soy el asistente del taller ${N.nombre}. Te doy precios orientativos, horario o te pido cita para tu moto.`,
+      precios: "Revisión general desde 49 €\nCambio de aceite y filtro desde 35 €\nMontaje de neumático desde 15 €\nPre-ITV 25 €\nAverías: presupuesto sin compromiso\n(precios de ejemplo; dependen de tu moto)",
+      accion: "Pedir cita", hecho: "Perfecto. Elige el servicio y el día para dejar la moto y apunta el modelo: te confirmamos por WhatsApp 👇", ancla: "#reserva",
+      rapidas: ["¿Cuánto cuesta una revisión?", "¿Qué horario tenéis?", "Mi moto no arranca", "Pedir cita"]},
+    inmobiliaria: {
+      hola: `¡Hola! Soy el asistente de ${N.nombre}. Dime si buscas comprar o alquilar, zona y presupuesto, y te enseño lo que encaja.`,
+      precios: "Ahora mismo tenemos pisos de 2 y 3 dormitorios desde 260.000 € en venta y desde 1.150 €/mes en alquiler (datos de ejemplo). ¿Qué zona te interesa?",
+      accion: "Ver pisos en 3D", hecho: "Te llevo a los pisos: puedes recorrerlos en 3D desde el móvil 👇", ancla: "#pisos",
+      rapidas: ["Busco piso en alquiler", "¿Qué horario tenéis?", "¿Dónde estáis?", "Ver pisos en 3D"]},
+  }[N.tipo] || EXTRA;
+  const $ = id => document.getElementById(id), panel = $("asisPanel"), msgs = $("asisMsgs");
+  function decir(texto, quien) {
+    const el = document.createElement("div"); el.className = "asis-m " + quien; el.textContent = texto;
+    msgs.appendChild(el); msgs.scrollTop = msgs.scrollHeight;
+  }
+  function responder(q) {
+    const t = q.toLowerCase();
+    for (const [patron, respuesta] of (R.extra || [])) if (new RegExp(patron, "i").test(t)) return respuesta;
+    if (/hora|abr|cerr|horario/.test(t)) return "Nuestro horario:\n" + horario;
+    if (/d[oó]nde|direcci|llegar|ubicaci|calle/.test(t)) return donde;
+    if (/precio|cu[aá]nto|cuesta|tarifa|vale|alquiler|compra|piso|revisi|aceite|neum/.test(t)) return R.precios;
+    if (N.tipo === "taller" && /arranca|aver[ií]a|ruido|humo|falla/.test(t)) return "Vaya. Tráela cuando puedas y te hacemos la diagnosis; o dime el modelo y qué le pasa y te damos un presupuesto orientativo.";
+    if (/reserv|cita|pedir|ver pisos|3d|visita|prueba|presupuesto|matr[ií]c|apunt/.test(t)) { setTimeout(() => { location.hash = R.ancla; }, 900); return R.hecho; }
+    if (/hola|buenas|hey/.test(t)) return R.hola;
+    return `Eso te lo contesta en persona el equipo de ${N.nombre}: les paso tu mensaje y te escriben por WhatsApp en cuanto puedan.`;
+  }
+  function preguntar(q) { decir(q, "yo"); setTimeout(() => decir(responder(q), "bot"), 450); }
+  $("asisRap").innerHTML = (R.rapidas || []).map(r => `<button type="button">${r}</button>`).join("");
+  $("asisRap").addEventListener("click", e => { const b = e.target.closest("button"); if (b) preguntar(b.textContent); });
+  $("asisForm").addEventListener("submit", e => { e.preventDefault(); const v = $("asisTxt").value.trim(); if (v) { preguntar(v); $("asisTxt").value = ""; } });
+  function abrir(si) { panel.hidden = !si; $("asisAbrir").hidden = si; $("asisAbrir").setAttribute("aria-expanded", si); if (si && !msgs.childElementCount) decir(R.hola, "bot"); if (si) $("asisTxt").focus(); }
+  $("asisAbrir").onclick = () => abrir(true);
+  $("asisCerrar").onclick = () => abrir(false);
+})();
+</script>
+</body>
+</html>
